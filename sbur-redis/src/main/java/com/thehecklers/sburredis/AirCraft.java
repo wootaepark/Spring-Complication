@@ -7,12 +7,14 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RedisHash // Aircraft가 레디스 해시에 저장될 애그리거트 루트 임을 표시
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AirCraft{
 
@@ -41,8 +43,8 @@ public class AirCraft{
 	@JsonProperty("bds40_seen_time")
 	private Instant bds40SeenTime;
 
-	// 메서드 구현
-	public String getLastSeenTime(){
+	// 메서드 구현, reddis 사용시에만 필요
+	/*public String getLastSeenTime(){
 		return lastSeenTime.toString();
 	}
 	public void setLastSeenTime(String lastSeenTime){
@@ -79,7 +81,7 @@ public class AirCraft{
 		else{
 			this.bds40SeenTime = Instant.ofEpochSecond(0);
 		}
-	}
+	}*/
 
 
 }

@@ -21,7 +21,7 @@ import java.time.Instant;
 @SpringBootApplication
 public class SburRedisApplication {
 
-	@Bean
+	/*@Bean
 	public RedisOperations<String ,AirCraft> redisOperatations(RedisConnectionFactory factory){
 		Jackson2JsonRedisSerializer<AirCraft> serializer = new Jackson2JsonRedisSerializer<>(AirCraft.class);
 
@@ -32,7 +32,9 @@ public class SburRedisApplication {
 
 
 		return template;
-	}
+	}*/
+	
+	// reddis 템플릿 에서 repository 를 이용한 프로그램으로 변경하면서 reddis 의 bean 등록이 필요 없어짐
 
 	public static void main(String[] args) {
 		SpringApplication.run(SburRedisApplication.class, args);

@@ -18,12 +18,14 @@ public class PlaneFinderPoller {
     private WebClient client = WebClient.create("http://localhost:7634/aircraft");
 
     private final RedisConnectionFactory connectionFactory;
-    private final RedisOperations<String, AirCraft> redisOperations;
+   // private final RedisOperations<String, AirCraft> redisOperations;
+
+    private final AircraftRepository repository;
 
     PlaneFinderPoller(RedisConnectionFactory connectionFactory,
-                      RedisOperations<String, AirCraft> redisOperations){
+                      AircraftRepository repository){
         this.connectionFactory = connectionFactory;
-        this.redisOperations = redisOperations;
+        this.repository = repository;
     }
 
     @Scheduled(fixedRate = 1000) // 폴링 빈도 1000ms 당 한번 (1초당 한번)
@@ -35,13 +37,24 @@ public class PlaneFinderPoller {
                 .bodyToFlux(AirCraft.class)
                 .filter(plane -> !plane.getReg().isEmpty())
                 .toStream()
-                .forEach(ac -> redisOperations.opsForValue().set(ac.getReg(),ac));
+                .forEach(repository::save);
 
-        redisOperations.opsForValue()
+        repository.findAll().forEach(System.out::println);
+        
+        
+        
+        
+        
+        // 아래 주석 된 두 섹션 코드는 redis 템플릿 사용시의 코드
+               // .forEach(ac -> redisOperations.opsForValue().set(ac.getReg(),ac)); // 저장 코드
+
+        /*redisOperations.opsForValue()
                 .getOperations()
                 .keys("*")
                 .forEach(ac->
-                        System.out.println(redisOperations.opsForValue().get(ac)));
+                        System.out.println(redisOperations.opsForValue().get(ac)));*/
+        
+        
     }
 
 
